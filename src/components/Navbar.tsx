@@ -12,6 +12,8 @@ export default function Navbar() {
       py="5"
       align="center"
       justify="flex-start"
+      className="app-navbar"
+
     >
 
       <MountainIcon height={48} />
