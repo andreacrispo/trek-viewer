@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 
-import mapboxgl from "mapbox-gl"; // eslint-disable-line import/no-webpack-loader-syntax
+import * as mapboxgl from 'mapbox-gl';
 
 import animatePath from '../service/AnimatePath';
 import * as turf from "@turf/turf";

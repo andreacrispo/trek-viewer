@@ -1,4 +1,8 @@
-import mapboxgl from "mapbox-gl";
+// import mapboxgl from '!mapbox-gl'; // eslint-disable-line import/no-webpack-loader-syntax
+
+import * as mapboxgl from 'mapbox-gl';
+
+
 import { computeCameraPosition } from "./Util";
 
 
