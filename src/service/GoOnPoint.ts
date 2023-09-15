@@ -19,6 +19,7 @@ export function getAnimationMoltiplicator(animationPhase: number, flyInAndRotate
   return easeCubicOut(animationPhase);
 }
 
+/**   animate zooming in to the start point, get the final bearing and altitude for use in the next animation */
 const goOnPoint = async ({
   map,
   targetLngLat,

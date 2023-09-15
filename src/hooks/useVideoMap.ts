@@ -8,6 +8,8 @@ import { TrackData } from '../model/TrackData';
 import { Feature, LineString } from 'geojson';
 import { add3D, addPathSourceAndLayer, setFinalView } from '../service/MapSourceLayer';
 import goOnPoint from '../service/GoOnPoint';
+import { VideoRecorder } from '../service/VideoRecorder';
+import { blob } from 'stream/consumers';
 
 const START_BEARING = 0; //  north is 0°, east is 90°, south is 180°, and west is 270°
 const START_ALTITUDE = 3000000;
@@ -36,37 +38,16 @@ const useMap = (trackData: TrackData, setVideoBlob, duration) => {
 
 
     map.current.on("load", async () => {
+
       add3D(map.current);
+
       addPathSourceAndLayer(trackGeojson, map.current);
 
-      // stub performance.now for deterministic rendering per-frame (only available in dev build)
-      let now = performance.now();
-      mapboxgl.setNow(now);
-      function frame() {
-        now += 1000 / 60;
-        mapboxgl.setNow(now);
-      }
+      const canvas = map.current.getCanvas();
 
-      map.current.on('render', frame); // set up frame-by-frame recording
-      const stream = map.current.getCanvas().captureStream(60);
+      const videoRecorder = new VideoRecorder(canvas, (videoBlob) => setVideoBlob(videoBlob));
 
-      const chunks: any[] = [];
-      // Create media recorder from canvas stream
-      const mediaRecorder = new MediaRecorder(stream, {
-        mimeType: "video/webm; codecs=vp9",
-      });
-      // Record data in chunks array when data is available
-      mediaRecorder.ondataavailable = (evt) => {
-        chunks.push(evt.data);
-      };
-      // Provide recorded data when recording stops
-      mediaRecorder.onstop = () => {
-        const blob = new Blob(chunks, { type: "video/webm" });
-        setVideoBlob(blob);
-      };
-
-      // Start recording using a 1s / 60 (60fps) timeslice [ie data is made available every 1s)
-      mediaRecorder.start(1000 / 60);
+      videoRecorder.start();
 
 
       let bearing = START_BEARING;
@@ -79,7 +60,7 @@ const useMap = (trackData: TrackData, setVideoBlob, duration) => {
       };
 
       setElevation(firstCoordinate[2]);
-      //animate zooming in to the start point, get the final bearing and altitude for use in the next animation
+
       let result: any = await goOnPoint({
         map: map.current,
         targetLngLat,
@@ -110,11 +91,7 @@ const useMap = (trackData: TrackData, setVideoBlob, duration) => {
 
       setFinalView(map.current, turf.bbox(trackGeojson));
 
-      // stop recording
-      map.current.off('render', frame);
-
-      mapboxgl.restoreNow();
-      mediaRecorder.stop();
+      videoRecorder.stop();
     });
 
 
