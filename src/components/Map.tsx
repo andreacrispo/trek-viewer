@@ -10,19 +10,20 @@ mapboxgl.accessToken = 'pk.eyJ1IjoiYW5kd2hhdHNvIiwiYSI6ImNsbWM0Y281eTAxdGYza256e
 
 
 export interface Props {
-  trackData: TrackData
-  duration: number
-  setVideoBlob
+  trackData: TrackData;
+  duration: number;
+  bearing: number;
+  setVideoBlob;
 }
 
-export const Map: React.FC<Props> = ({ trackData, duration, setVideoBlob }: Props) => {
+export const Map: React.FC<Props> = ({ trackData, duration, setVideoBlob, bearing }: Props) => {
 
   const durationInMs = duration * 1000;
 
   const {
     mapContainer,
     elevation,
-  } = useMap(trackData, setVideoBlob, durationInMs);
+  } = useMap({ trackData, setVideoBlob, durationInMs, bearing });
 
 
   return (

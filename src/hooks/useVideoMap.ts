@@ -11,11 +11,16 @@ import goOnPoint from '../service/GoOnPoint';
 import { VideoRecorder } from '../service/VideoRecorder';
 import { blob } from 'stream/consumers';
 
-const START_BEARING = 0; //  north is 0°, east is 90°, south is 180°, and west is 270°
 const START_ALTITUDE = 3000000;
 
+export interface Props {
+  trackData: TrackData;
+  durationInMs: number;
+  bearing: number;
+  setVideoBlob;
+}
 
-const useMap = (trackData: TrackData, setVideoBlob, duration) => {
+const useMap = ({ trackData, setVideoBlob, durationInMs, bearing }: Props) => {
 
   const mapContainer = useRef(null);
   const map = useRef(null);
@@ -33,7 +38,7 @@ const useMap = (trackData: TrackData, setVideoBlob, duration) => {
       zoom: 1.9466794621990684,
       center: { lng: 45.65331270304168, lat: 8.549541959889874 },
       pitch: 70,
-      bearing: 0,
+      bearing: bearing,
     });
 
 
@@ -50,9 +55,7 @@ const useMap = (trackData: TrackData, setVideoBlob, duration) => {
       videoRecorder.start();
 
 
-      let bearing = START_BEARING;
       let altitude = 12000;
-
       const firstCoordinate = trackGeojson.geometry.coordinates[0];
       let targetLngLat = {
         lng: firstCoordinate[0],
@@ -67,20 +70,19 @@ const useMap = (trackData: TrackData, setVideoBlob, duration) => {
         duration: 5000,
         startAltitude: START_ALTITUDE,
         endAltitude: 12000,
-        startBearing: START_BEARING,
-        endBearing: 0,
+        startBearing: bearing,
+        endBearing: bearing,
         startPitch: 40,
         endPitch: 50,
         flyInAndRotate: true
       });
-      bearing = result.bearing;
       altitude = result.altitude;
 
 
       await new Promise(r => setTimeout(r, 500));
       await animatePath({
         map: map.current,
-        duration: duration,
+        duration: durationInMs,
         path: trackGeojson,
         startBearing: bearing,
         startAltitude: altitude,

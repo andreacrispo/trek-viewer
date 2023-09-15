@@ -7,6 +7,8 @@ import { Button, Flex, Grid, GridItem, Spacer } from "@chakra-ui/react";
 
 
 const DURATION_IN_SEC = 20; // 20000;  
+const START_BEARING = 0; //  north is 0°, east is 90°, south is 180°, and west is 270°
+
 
 export interface Props {
   trackData: TrackData
@@ -16,15 +18,19 @@ export interface Props {
 export const VideoMap: React.FC<Props> = ({ trackData }: Props) => {
   let [keySetting, setKeySetting] = useState<number>(0);
   const [duration, setDuration] = useState<number>(DURATION_IN_SEC);
+  const [bearing, setBearing] = useState<number>(START_BEARING);
   let [videoBlob, setVideoBlob] = useState<Blob>(null);
   const downloadVideo = (e) => downloadFile(`${trackData.name}.webm`, videoBlob);
 
-  const handleDurationChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setVideoBlob(null);
-    return setDuration(parseInt(e.target.value));
-  }
+  const handleDurationChange = (e: ChangeEvent<HTMLInputElement>) => setDuration(parseInt(e.target.value));
+
+
+  const handleBearingChanged = (e: ChangeEvent<HTMLInputElement>) => setBearing(parseInt(e.target.value));
+
+
 
   const runVideo = (_) => {
+    setVideoBlob(null);
     keySetting++;
     setKeySetting(keySetting);
   }
@@ -34,7 +40,10 @@ export const VideoMap: React.FC<Props> = ({ trackData }: Props) => {
     <Grid gridTemplateColumns={'350px 1fr'} gap={6}>
       <GridItem w='100%' h={"95vh"} >
         <Flex direction={'column'} height="100%" padding={4}>
-          <Editor duration={duration} durationChanged={handleDurationChange} />
+          <Editor
+            duration={duration} durationChanged={handleDurationChange}
+            bearing={bearing} bearingChanged={handleBearingChanged}
+          />
           <Button colorScheme='blue' onClick={runVideo}>Play</Button>
           <Spacer />
           <Button colorScheme='blue' onClick={downloadVideo}
@@ -47,7 +56,11 @@ export const VideoMap: React.FC<Props> = ({ trackData }: Props) => {
 
       </GridItem>
       <GridItem w='100%' h={"95vh"} >
-        <Map key={keySetting} trackData={trackData} duration={duration} setVideoBlob={setVideoBlob} />
+        <Map key={keySetting} trackData={trackData}
+          duration={duration}
+          bearing={bearing}
+          setVideoBlob={setVideoBlob}
+        />
       </GridItem>
     </Grid>
 
