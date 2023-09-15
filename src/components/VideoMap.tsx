@@ -3,7 +3,7 @@ import { TrackData } from "../model/TrackData";
 import { Map } from "./Map";
 import Editor from "./Editor";
 import { downloadFile } from "../service/Util";
-import { Button, Center, Flex, Grid, GridItem, Input, Spacer } from "@chakra-ui/react";
+import { Button, Center, Flex, Grid, GridItem, Heading, Input, Spacer } from "@chakra-ui/react";
 import { ReactComponent as GpxSvg } from './../gpx_map.svg';
 import { GpxParser } from "../service/GpxParser";
 
@@ -53,7 +53,7 @@ export const VideoMap: React.FC = () => {
   return (
 
     <Grid gridTemplateColumns={'350px 1fr'} >
-      <GridItem w='100%' h={"95vh"} className="map-editor" boxShadow='lg'>
+      <GridItem w='100%' h={"94vh"} className="map-editor" boxShadow='lg'>
         <Flex direction={'column'} height="100%" padding={4}>
           <Editor
             duration={duration} durationChanged={handleDurationChange}
@@ -74,7 +74,7 @@ export const VideoMap: React.FC = () => {
       </GridItem>
 
       {trackData &&
-        <GridItem w='100%' h={"95vh"} >
+        <GridItem w='100%' h={"94vh"} >
           <Map key={keySetting} trackData={trackData}
             duration={duration}
             bearing={bearing}
@@ -87,7 +87,8 @@ export const VideoMap: React.FC = () => {
       {!trackData &&
         <Center className="map-file-selection" >
           <Flex flexDirection={'column'}>
-            <GpxSvg height={500} width={500}></GpxSvg>
+            <Heading>Upload a GPX file</Heading>
+            <GpxSvg height={400} width={400}></GpxSvg>
             <input type='file' id='gpxUploadFile' onChange={handleFileChange} />
           </Flex>
         </Center>
