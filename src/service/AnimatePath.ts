@@ -51,6 +51,7 @@ const animatePath = async ({
         // Do not use terrain exaggeration to get actual meter values
         map.queryTerrainElevation(lngLat, { exaggerated: false })
       );
+
       setElevation(elevationFromMap);
 
 

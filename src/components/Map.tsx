@@ -13,17 +13,18 @@ export interface Props {
   trackData: TrackData;
   duration: number;
   bearing: number;
+  is3DEnabled: boolean;
   setVideoBlob;
 }
 
-export const Map: React.FC<Props> = ({ trackData, duration, setVideoBlob, bearing }: Props) => {
+export const Map: React.FC<Props> = ({ trackData, duration, setVideoBlob, bearing, is3DEnabled }: Props) => {
 
   const durationInMs = duration * 1000;
 
   const {
     mapContainer,
     elevation,
-  } = useMap({ trackData, setVideoBlob, durationInMs, bearing });
+  } = useMap({ trackData, setVideoBlob, durationInMs, bearing, is3DEnabled: is3DEnabled });
 
 
   return (

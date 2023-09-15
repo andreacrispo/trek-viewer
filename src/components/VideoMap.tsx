@@ -19,15 +19,14 @@ export const VideoMap: React.FC<Props> = ({ trackData }: Props) => {
   let [keySetting, setKeySetting] = useState<number>(0);
   const [duration, setDuration] = useState<number>(DURATION_IN_SEC);
   const [bearing, setBearing] = useState<number>(START_BEARING);
+  const [is3DEnabled, setIs3DEnabled] = useState<boolean>(true);
+
   let [videoBlob, setVideoBlob] = useState<Blob>(null);
   const downloadVideo = (e) => downloadFile(`${trackData.name}.webm`, videoBlob);
 
   const handleDurationChange = (e: ChangeEvent<HTMLInputElement>) => setDuration(parseInt(e.target.value));
-
-
   const handleBearingChanged = (e: ChangeEvent<HTMLInputElement>) => setBearing(parseInt(e.target.value));
-
-
+  const handleis3DEnabledChanged = (e: ChangeEvent<HTMLInputElement>) => setIs3DEnabled(e.target.checked);
 
   const runVideo = (_) => {
     setVideoBlob(null);
@@ -43,6 +42,7 @@ export const VideoMap: React.FC<Props> = ({ trackData }: Props) => {
           <Editor
             duration={duration} durationChanged={handleDurationChange}
             bearing={bearing} bearingChanged={handleBearingChanged}
+            is3DEnabled={is3DEnabled} is3DEnabledChanged={handleis3DEnabledChanged}
           />
           <Button colorScheme='blue' onClick={runVideo}>Play</Button>
           <Spacer />
@@ -59,6 +59,7 @@ export const VideoMap: React.FC<Props> = ({ trackData }: Props) => {
         <Map key={keySetting} trackData={trackData}
           duration={duration}
           bearing={bearing}
+          is3DEnabled={is3DEnabled}
           setVideoBlob={setVideoBlob}
         />
       </GridItem>

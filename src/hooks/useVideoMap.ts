@@ -6,7 +6,7 @@ import animatePath from '../service/AnimatePath';
 import * as turf from "@turf/turf";
 import { TrackData } from '../model/TrackData';
 import { Feature, LineString } from 'geojson';
-import { add3D, addPathSourceAndLayer, setFinalView } from '../service/MapSourceLayer';
+import { add3D, addPathSourceAndLayer, remove3D, setFinalView } from '../service/MapSourceLayer';
 import goOnPoint from '../service/GoOnPoint';
 import { VideoRecorder } from '../service/VideoRecorder';
 import { blob } from 'stream/consumers';
@@ -17,10 +17,11 @@ export interface Props {
   trackData: TrackData;
   durationInMs: number;
   bearing: number;
+  is3DEnabled: boolean;
   setVideoBlob;
 }
 
-const useMap = ({ trackData, setVideoBlob, durationInMs, bearing }: Props) => {
+const useMap = ({ trackData, setVideoBlob, durationInMs, bearing, is3DEnabled }: Props) => {
 
   const mapContainer = useRef(null);
   const map = useRef(null);
@@ -43,8 +44,8 @@ const useMap = ({ trackData, setVideoBlob, durationInMs, bearing }: Props) => {
 
 
     map.current.on("load", async () => {
-
-      add3D(map.current);
+      if (is3DEnabled)
+        add3D(map.current);
 
       addPathSourceAndLayer(trackGeojson, map.current);
 
@@ -91,7 +92,7 @@ const useMap = ({ trackData, setVideoBlob, durationInMs, bearing }: Props) => {
       });
 
 
-      setFinalView(map.current, turf.bbox(trackGeojson));
+      setFinalView(map.current, turf.bbox(trackGeojson), is3DEnabled);
 
       videoRecorder.stop();
     });

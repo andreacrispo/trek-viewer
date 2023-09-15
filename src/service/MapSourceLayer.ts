@@ -98,7 +98,7 @@ const addPathSourceAndLayer = (trackGeojson, map) => {
 };
 
 
-const setFinalView = (map, bounds) => {
+const setFinalView = (map, bounds, is3DEnabled) => {
   // get the bounds of the linestring, use fitBounds() to animate to a final view
   map.fitBounds(bounds, {
     duration: 3000,
@@ -106,7 +106,10 @@ const setFinalView = (map, bounds) => {
     bearing: 0,
     padding: 120,
   });
-  remove3D(map);
+
+  // In the final view remove the 3D (if enabled)
+  if (is3DEnabled)
+    remove3D(map);
 }
 
 
