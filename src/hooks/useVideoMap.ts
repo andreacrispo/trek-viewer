@@ -1,26 +1,30 @@
-import { useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 
 import * as mapboxgl from 'mapbox-gl';
 
 import animatePath from '../service/AnimatePath';
 import * as turf from "@turf/turf";
-import { TrackData } from '../model/TrackData';
 import { Feature, LineString } from 'geojson';
 import { add3D, addPathSourceAndLayer, remove3D, setFinalView } from '../service/MapSourceLayer';
 import goOnPoint from '../service/GoOnPoint';
 import { VideoRecorder } from '../service/VideoRecorder';
+import VideoMapContext from '../context/VideoMapContext';
 
 const START_ALTITUDE = 3000000;
+const ALTITUDE_VIEW = 12000;
 
-export interface Props {
-  trackData: TrackData;
-  durationInMs: number;
-  bearing: number;
-  is3DEnabled: boolean;
-  setVideoBlob;
-}
 
-const useMap = ({ trackData, setVideoBlob, durationInMs, bearing, is3DEnabled }: Props) => {
+const useMap = () => {
+
+  const {
+    trackData,
+    duration,
+    bearing,
+    is3DEnabled,
+    setVideoBlob
+  } = useContext(VideoMapContext);
+
+  const durationInMs = duration * 1000;
 
   const mapContainer = useRef(null);
   const map = useRef<mapboxgl.Map | null>(null);
@@ -60,20 +64,19 @@ const useMap = ({ trackData, setVideoBlob, durationInMs, bearing, is3DEnabled }:
       videoRecorder.start();
 
 
-      let altitude = 12000;
+      let altitude = ALTITUDE_VIEW;
       let targetLngLat = {
         lng: firstCoordinate[0],
         lat: firstCoordinate[1],
       };
 
-      setElevation(firstCoordinate[2]);
 
       let result: any = await goOnPoint({
         map: map.current,
         targetLngLat,
         duration: 5000,
         startAltitude: START_ALTITUDE,
-        endAltitude: 12000,
+        endAltitude: ALTITUDE_VIEW,
         startBearing: bearing,
         endBearing: bearing,
         startPitch: 40,

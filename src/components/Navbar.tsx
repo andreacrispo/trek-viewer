@@ -18,8 +18,6 @@ export default function Navbar() {
 
       <MountainIcon height={48} />
 
-
-
       <HStack>
         <Heading pl={4}>Trek Viewer</Heading>
       </HStack>

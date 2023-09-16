@@ -8,14 +8,14 @@ import { Feature, LineString } from "geojson";
 const trackPathColor = "yellow";
 
 export interface AnimatePathProps {
-  map:mapboxgl.Map,
-  duration:number,
-  path:Feature<LineString>,
-  startBearing:number,
-  startAltitude:number,
-  pitch:number,
+  map: mapboxgl.Map,
+  duration: number,
+  path: Feature<LineString>,
+  startBearing: number,
+  startAltitude: number,
+  pitch: number,
   setElevation,
-  setDistance 
+  setDistance
 }
 
 /**  follow the path while slowly rotating the camera, passing in the camera bearing and altitude from the previous animation */
@@ -28,7 +28,7 @@ const animatePath = async ({
   pitch,
   setElevation,
   setDistance
-}:AnimatePathProps) => {
+}: AnimatePathProps) => {
   return new Promise<void>(async (resolve) => {
 
     const pathDistance = turf.lineDistance(path);
@@ -48,7 +48,7 @@ const animatePath = async ({
 
       const currentDistance = pathDistance * animationPhase;
 
-      const alongPath =  turf.along(path, currentDistance).geometry.coordinates;
+      const alongPath = turf.along(path, currentDistance).geometry.coordinates;
 
       const lngLat = {
         lng: alongPath[0],
@@ -95,7 +95,7 @@ const animatePath = async ({
       // set the pitch and bearing of the camera
       const camera = map.getFreeCameraOptions();
       camera.setPitchBearing(pitch, bearing);
-  
+
 
       // set the position and altitude of the camera
       camera.position = mapboxgl.MercatorCoordinate.fromLngLat(

@@ -1,38 +1,34 @@
 import { Checkbox, FormControl, FormLabel, Input, Select, VStack } from "@chakra-ui/react";
+import VideoMapContext from "../context/VideoMapContext";
+import { ChangeEvent, useContext } from "react";
 
 const MIN_DURATION_IN_SEC = 5;
 
 
-export interface Props {
-  durationChanged: (e) => void;
-  duration: number;
-  bearing: number;
-  bearingChanged: (e) => void;
-  is3DEnabled: boolean;
-  is3DEnabledChanged: (e) => void;
-}
 
-
-export const Editor: React.FC<Props> = (props: Props) => {
+export const Editor: React.FC = () => {
 
   const {
-    duration, durationChanged,
-    bearing, bearingChanged,
-    is3DEnabled, is3DEnabledChanged,
-  } = props;
+    duration, setDuration,
+    bearing, setBearing,
+    is3DEnabled, setIs3DEnabled,
+  } = useContext(VideoMapContext);
+
+  const handleDurationChange = (e: ChangeEvent<HTMLInputElement>) => setDuration(parseInt(e.target.value));
+  const handleBearingChanged = (e) => setBearing(parseInt(e.target.value));
+  const handleis3DEnabledChanged = (e: ChangeEvent<HTMLInputElement>) => setIs3DEnabled(e.target.checked);
+
 
   return (
-
-
     <VStack padding={8} spacing={8}>
       <FormControl>
         <FormLabel>Duration (seconds)</FormLabel>
-        <Input type='number' min={MIN_DURATION_IN_SEC} value={duration} onChange={durationChanged} />
+        <Input type='number' min={MIN_DURATION_IN_SEC} value={duration} onChange={handleDurationChange} />
       </FormControl>
 
       <FormControl>
         <FormLabel>Camera orientation (Bearing)</FormLabel>
-        <Select value={bearing} onChange={bearingChanged}>
+        <Select value={bearing} onChange={handleBearingChanged}>
           <option value='0'>North</option>
           <option value='90'>East</option>
           <option value='180'>South</option>
@@ -42,12 +38,10 @@ export const Editor: React.FC<Props> = (props: Props) => {
 
       <FormControl>
         <FormLabel>
-          <Checkbox size='lg' isChecked={is3DEnabled} onChange={is3DEnabledChanged}> Enable 3D</Checkbox>
+          <Checkbox size='lg' isChecked={is3DEnabled} onChange={handleis3DEnabledChanged}> Enable 3D</Checkbox>
         </FormLabel>
       </FormControl>
     </VStack>
-
-
   )
 }
 
