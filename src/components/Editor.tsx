@@ -12,11 +12,13 @@ export const Editor: React.FC = () => {
     duration, setDuration,
     bearing, setBearing,
     is3DEnabled, setIs3DEnabled,
+    isFlyOnPointEnabled, setIsFlyOnPointEnabled
   } = useContext(VideoMapContext);
 
   const handleDurationChange = (e: ChangeEvent<HTMLInputElement>) => setDuration(parseInt(e.target.value));
   const handleBearingChanged = (e) => setBearing(parseInt(e.target.value));
   const handleis3DEnabledChanged = (e: ChangeEvent<HTMLInputElement>) => setIs3DEnabled(e.target.checked);
+  const handleIsFlyOnPointEnabled = (e: ChangeEvent<HTMLInputElement>) => setIsFlyOnPointEnabled(e.target.checked);
 
 
   return (
@@ -41,6 +43,13 @@ export const Editor: React.FC = () => {
           <Checkbox size='lg' isChecked={is3DEnabled} onChange={handleis3DEnabledChanged}> Enable 3D</Checkbox>
         </FormLabel>
       </FormControl>
+
+      <FormControl>
+        <FormLabel>
+          <Checkbox size='lg' isChecked={isFlyOnPointEnabled} onChange={handleIsFlyOnPointEnabled}> Fly on point</Checkbox>
+        </FormLabel>
+      </FormControl>
+
     </VStack>
   )
 }

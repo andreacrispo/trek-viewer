@@ -26,6 +26,7 @@ export const VideoMap: React.FC = () => {
   const [duration, setDuration] = useState<number>(DURATION_IN_SEC);
   const [bearing, setBearing] = useState<number>(START_BEARING);
   const [is3DEnabled, setIs3DEnabled] = useState<boolean>(true);
+  const [isFlyOnPointEnabled, setIsFlyOnPointEnabled] = useState<boolean>(true);
 
   let [videoBlob, setVideoBlob] = useState<Blob>(null);
   const downloadVideo = (e) => downloadFile(`${trackData.name}.webm`, videoBlob);
@@ -48,7 +49,10 @@ export const VideoMap: React.FC = () => {
     setKeySetting(keySetting);
   }
 
-  const contextState = { trackData, duration, setDuration, bearing, setBearing, is3DEnabled, setIs3DEnabled, setVideoBlob };
+  const contextState = {
+    trackData, duration, bearing, is3DEnabled, isFlyOnPointEnabled,
+    setDuration, setBearing, setIs3DEnabled, setVideoBlob, setIsFlyOnPointEnabled
+  };
 
   return (
     <VideoMapContext.Provider value={contextState}>

@@ -8,11 +8,13 @@ export interface VideoMapState {
   duration: number,
   bearing: number,
   is3DEnabled: boolean,
+  isFlyOnPointEnabled: boolean,
 
   setVideoBlob
   setDuration
   setBearing
-  setIs3DEnabled
+  setIs3DEnabled,
+  setIsFlyOnPointEnabled
 }
 
 const VideoMapContext = React.createContext<VideoMapState>({
@@ -21,10 +23,12 @@ const VideoMapContext = React.createContext<VideoMapState>({
   bearing: 0,
   duration: 0,
   is3DEnabled: true,
+  isFlyOnPointEnabled: true,
   setDuration: () => { },
   setBearing: () => { },
   setIs3DEnabled: () => { },
-  setVideoBlob: () => { }
+  setVideoBlob: () => { },
+  setIsFlyOnPointEnabled: () => { }
 });
 
 export default VideoMapContext;

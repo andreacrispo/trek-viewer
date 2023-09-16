@@ -21,6 +21,7 @@ const useMap = () => {
     duration,
     bearing,
     is3DEnabled,
+    isFlyOnPointEnabled,
     setVideoBlob
   } = useContext(VideoMapContext);
 
@@ -81,7 +82,7 @@ const useMap = () => {
         endBearing: bearing,
         startPitch: 40,
         endPitch: 50,
-        flyInAndRotate: true
+        flyInAndRotate: isFlyOnPointEnabled
       });
       altitude = result.altitude;
 

@@ -3,7 +3,7 @@
 import * as mapboxgl from 'mapbox-gl';
 import useMap from '../hooks/useVideoMap';
 
-mapboxgl.accessToken = 'pk.eyJ1IjoiYW5kd2hhdHNvIiwiYSI6ImNsbWM0Y281eTAxdGYza256eTA1YnFzbDcifQ.WMwmxneUuPN2aUjRTpl8LQ';
+(mapboxgl as any).accessToken = 'pk.eyJ1IjoiYW5kd2hhdHNvIiwiYSI6ImNsbWM0Y281eTAxdGYza256eTA1YnFzbDcifQ.WMwmxneUuPN2aUjRTpl8LQ';
 
 
 
