@@ -9,7 +9,6 @@ import { Feature, LineString } from 'geojson';
 import { add3D, addPathSourceAndLayer, remove3D, setFinalView } from '../service/MapSourceLayer';
 import goOnPoint from '../service/GoOnPoint';
 import { VideoRecorder } from '../service/VideoRecorder';
-import { blob } from 'stream/consumers';
 
 const START_ALTITUDE = 3000000;
 
@@ -24,10 +23,12 @@ export interface Props {
 const useMap = ({ trackData, setVideoBlob, durationInMs, bearing, is3DEnabled }: Props) => {
 
   const mapContainer = useRef(null);
-  const map = useRef(null);
+  const map = useRef<mapboxgl.Map | null>(null);
   const [elevation, setElevation] = useState(0);
   const [distance, setDistance] = useState(0);
   const trackGeojson = trackData.toGeoJson().features[0] as Feature<LineString>;
+
+  const firstCoordinate = trackGeojson.geometry.coordinates[0];
 
   useEffect(() => {
     if (map.current)
@@ -35,10 +36,12 @@ const useMap = ({ trackData, setVideoBlob, durationInMs, bearing, is3DEnabled }:
 
     map.current = new mapboxgl.Map({
       container: mapContainer.current,
-      projection: "globe",
+      projection: {
+        name: "globe"
+      },
       style: "mapbox://styles/mapbox/satellite-streets-v12",
       zoom: 1.9466794621990684,
-      center: { lng: 45.65331270304168, lat: 8.549541959889874 },
+      center: { lng: firstCoordinate[0], lat: firstCoordinate[1] },
       pitch: 70,
       bearing: bearing,
     });
@@ -58,7 +61,6 @@ const useMap = ({ trackData, setVideoBlob, durationInMs, bearing, is3DEnabled }:
 
 
       let altitude = 12000;
-      const firstCoordinate = trackGeojson.geometry.coordinates[0];
       let targetLngLat = {
         lng: firstCoordinate[0],
         lat: firstCoordinate[1],
