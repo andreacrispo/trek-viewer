@@ -24,12 +24,16 @@ export const Map: React.FC<Props> = ({ trackData, duration, setVideoBlob, bearin
   const {
     mapContainer,
     elevation,
+    distance
   } = useMap({ trackData, setVideoBlob, durationInMs, bearing, is3DEnabled: is3DEnabled });
 
 
   return (
     <>
-      {<div className='elevation-text-container'> Elevation: {elevation} </div>}
+      <div className='widget-text-container'> 
+        { elevation > 0 &&  <p>Elevation: {elevation} m</p> }
+        {distance > 0 &&    <p>Distance: {distance} km</p> }
+      </div>
       <div ref={mapContainer} className="map-container" />
 
     </>

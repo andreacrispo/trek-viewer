@@ -26,6 +26,7 @@ const useMap = ({ trackData, setVideoBlob, durationInMs, bearing, is3DEnabled }:
   const mapContainer = useRef(null);
   const map = useRef(null);
   const [elevation, setElevation] = useState(0);
+  const [distance, setDistance] = useState(0);
   const trackGeojson = trackData.toGeoJson().features[0] as Feature<LineString>;
 
   useEffect(() => {
@@ -81,6 +82,7 @@ const useMap = ({ trackData, setVideoBlob, durationInMs, bearing, is3DEnabled }:
 
 
       await new Promise(r => setTimeout(r, 500));
+
       await animatePath({
         map: map.current,
         duration: durationInMs,
@@ -88,7 +90,8 @@ const useMap = ({ trackData, setVideoBlob, durationInMs, bearing, is3DEnabled }:
         startBearing: bearing,
         startAltitude: altitude,
         pitch: 50,
-        setElevation
+        setElevation,
+        setDistance
       });
 
 
@@ -104,6 +107,7 @@ const useMap = ({ trackData, setVideoBlob, durationInMs, bearing, is3DEnabled }:
   return {
     mapContainer,
     elevation,
+    distance
   }
 }
 

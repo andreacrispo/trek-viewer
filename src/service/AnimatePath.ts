@@ -15,7 +15,8 @@ const animatePath = async ({
   startBearing,
   startAltitude,
   pitch,
-  setElevation
+  setElevation,
+  setDistance
 }) => {
   return new Promise<void>(async (resolve) => {
 
@@ -38,8 +39,9 @@ const animatePath = async ({
         return;
       }
 
-      // calculate the distance along the path based on the animationPhase
-      const alongPath = turf.along(path, pathDistance * animationPhase).geometry.coordinates;
+      const currentDistance = pathDistance * animationPhase;
+
+      const alongPath =  turf.along(path, currentDistance).geometry.coordinates;
 
       const lngLat = {
         lng: alongPath[0],
@@ -52,9 +54,9 @@ const animatePath = async ({
         map.queryTerrainElevation(lngLat, { exaggerated: false })
       );
 
+
+      setDistance(currentDistance.toFixed(2));
       setElevation(elevationFromMap);
-
-
 
       // Reduce the visible length of the line by using a line-gradient to cutoff the line
       // animationPhase is a value between 0 and 1 that reprents the progress of the animation
@@ -97,10 +99,10 @@ const animatePath = async ({
       map.setFreeCameraOptions(camera);
 
       // repeat!
-      await window.requestAnimationFrame(frame);
+      window.requestAnimationFrame(frame);
     };
 
-    await window.requestAnimationFrame(frame);
+    window.requestAnimationFrame(frame);
   });
 };
 
