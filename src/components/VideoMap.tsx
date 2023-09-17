@@ -84,7 +84,7 @@ export const VideoMap: React.FC = () => {
             <Flex flexDirection={'column'}>
               <Heading>Upload a GPX file</Heading>
               <GpxSvg height={400} width={400}></GpxSvg>
-              <input type='file' id='gpxUploadFile' onChange={handleFileChange} />
+              <input type='file' id='gpxUploadFile' onChange={handleFileChange} accept=".gpx" />
             </Flex>
           </Center>
         }
